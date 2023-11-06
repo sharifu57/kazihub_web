@@ -7,7 +7,7 @@ import {
   ThemedLayoutV2,
   ThemedSiderV2,
   ThemedTitleV2,
-  useNotificationProvider,
+  useNotificationProvider
 } from "@refinedev/antd";
 import "@refinedev/antd/dist/reset.css";
 
@@ -15,7 +15,7 @@ import routerBindings, {
   CatchAllNavigate,
   DocumentTitleHandler,
   NavigateToResource,
-  UnsavedChangesNotifier,
+  UnsavedChangesNotifier
 } from "@refinedev/react-router-v6";
 import dataProvider from "@refinedev/simple-rest";
 import { App as AntdApp } from "antd";
@@ -29,17 +29,18 @@ import {
   BlogPostCreate,
   BlogPostEdit,
   BlogPostList,
-  BlogPostShow,
+  BlogPostShow
 } from "./pages/blog-posts";
 import {
   CategoryCreate,
   CategoryEdit,
   CategoryList,
-  CategoryShow,
+  CategoryShow
 } from "./pages/categories";
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
+import Home from "./web/pages/home";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -47,12 +48,11 @@ function App() {
   const i18nProvider = {
     translate: (key: string, params: object) => t(key, params),
     changeLocale: (lang: string) => i18n.changeLanguage(lang),
-    getLocale: () => i18n.language,
+    getLocale: () => i18n.language
   };
 
   return (
     <BrowserRouter>
-      <GitHubBanner />
       <RefineKbarProvider>
         <ColorModeContextProvider>
           <AntdApp>
@@ -63,35 +63,34 @@ function App() {
                 authProvider={authProvider}
                 i18nProvider={i18nProvider}
                 routerProvider={routerBindings}
-                resources={[
-                  {
-                    name: "blog_posts",
-                    list: "/blog-posts",
-                    create: "/blog-posts/create",
-                    edit: "/blog-posts/edit/:id",
-                    show: "/blog-posts/show/:id",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                  {
-                    name: "categories",
-                    list: "/categories",
-                    create: "/categories/create",
-                    edit: "/categories/edit/:id",
-                    show: "/categories/show/:id",
-                    meta: {
-                      canDelete: true,
-                    },
-                  },
-                ]}
+                resources={[]}
                 options={{
                   syncWithLocation: true,
                   warnWhenUnsavedChanges: true,
-                  projectId: "JBiidu-JBvyaL-QpNw0Q",
+                  projectId: "JBiidu-JBvyaL-QpNw0Q"
                 }}
               >
                 <Routes>
+                  <Route
+                    element={
+                      <ThemedLayoutV2
+                        Header={() => <Header sticky />}
+                        Sider={()=><></>}
+                        Title={({ collapsed }) => (
+                          <ThemedTitleV2
+                            collapsed={collapsed}
+                            text="refine Project"
+                            icon={<AppIcon />}
+                          />
+                        )}
+                      >
+                        <Outlet />
+                      </ThemedLayoutV2>
+                    }
+                  >
+                    {/* <Route path="*" element={<ErrorComponent />} /> */}
+                    <Route path="" element={<Home />} />
+                  </Route>
                   <Route
                     element={
                       <Authenticated
@@ -114,22 +113,6 @@ function App() {
                       </Authenticated>
                     }
                   >
-                    <Route
-                      index
-                      element={<NavigateToResource resource="blog_posts" />}
-                    />
-                    <Route path="/blog-posts">
-                      <Route index element={<BlogPostList />} />
-                      <Route path="create" element={<BlogPostCreate />} />
-                      <Route path="edit/:id" element={<BlogPostEdit />} />
-                      <Route path="show/:id" element={<BlogPostShow />} />
-                    </Route>
-                    <Route path="/categories">
-                      <Route index element={<CategoryList />} />
-                      <Route path="create" element={<CategoryCreate />} />
-                      <Route path="edit/:id" element={<CategoryEdit />} />
-                      <Route path="show/:id" element={<CategoryShow />} />
-                    </Route>
                     <Route path="*" element={<ErrorComponent />} />
                   </Route>
                   <Route
@@ -150,12 +133,7 @@ function App() {
                     />
                   </Route>
                 </Routes>
-
-                <RefineKbar />
-                <UnsavedChangesNotifier />
-                <DocumentTitleHandler />
               </Refine>
-              <DevtoolsPanel />
             </DevtoolsProvider>
           </AntdApp>
         </ColorModeContextProvider>
