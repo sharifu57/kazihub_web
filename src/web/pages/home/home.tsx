@@ -99,7 +99,7 @@ function Home() {
                     {skills ? (
                       skills.map((skill: any) => (
                         <p style={{ display: "inline" }} key={skill?.id}>
-                          <Button shape="round" style={{ marginRight: "3px" }}>
+                          <Button shape="round" style={{ marginRight: "3px", marginBottom: "5px" }}>
                             {skill?.name}
                           </Button>
                         </p>

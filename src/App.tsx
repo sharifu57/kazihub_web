@@ -42,6 +42,7 @@ import { Login } from "./pages/login";
 import { Register } from "./pages/register";
 import Home from "./web/pages/home/home";
 import Jobs from "./web/pages/jobs";
+import FrelancerLogin from "./web/pages/authentication/freelancer/login";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -76,7 +77,7 @@ function App() {
                     element={
                       <ThemedLayoutV2
                         Header={() => <Header sticky />}
-                        Sider={()=><></>}
+                        Sider={() => <></>}
                         Title={({ collapsed }) => (
                           <ThemedTitleV2
                             collapsed={collapsed}
@@ -91,7 +92,8 @@ function App() {
                   >
                     {/* <Route path="*" element={<ErrorComponent />} /> */}
                     <Route path="" element={<Home />} />
-                    <Route path="/jobs" element={<Jobs/>} />
+                    <Route path="/jobs" element={<Jobs />} />
+                    <Route path="/login" element={<FrelancerLogin />} />
                   </Route>
                   <Route
                     element={

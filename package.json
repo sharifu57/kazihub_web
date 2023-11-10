@@ -6,6 +6,7 @@
   "dependencies": {
     "@ant-design/icons": "^5.0.1",
     "@apollo/client": "^3.8.7",
+    "@react-oauth/google": "^0.11.1",
     "@refinedev/antd": "^5.7.0",
     "@refinedev/cli": "^2.7.4",
     "@refinedev/core": "^4.28.2",

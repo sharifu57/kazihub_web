@@ -9,6 +9,7 @@ import {
   InMemoryCache,
   gql
 } from "@apollo/client";
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 const container = document.getElementById("root") as HTMLElement;
 const root = createRoot(container);
@@ -19,9 +20,11 @@ const client = new ApolloClient({
 });
 
 root.render(
-  <React.StrictMode>
-    <ApolloProvider client={client}>
-      <App />
-    </ApolloProvider>
-  </React.StrictMode>
+  <GoogleOAuthProvider clientId="140823071607-kkj6bttfl1jrshmtojk1ceeasmnvrkof.apps.googleusercontent.com">
+    <React.StrictMode>
+      <ApolloProvider client={client}>
+        <App />
+      </ApolloProvider>
+    </React.StrictMode>
+  </GoogleOAuthProvider>
 );
