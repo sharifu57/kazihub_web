@@ -40,7 +40,8 @@ import {
 import { ForgotPassword } from "./pages/forgotPassword";
 import { Login } from "./pages/login";
 import { Register } from "./pages/register";
-import Home from "./web/pages/home";
+import Home from "./web/pages/home/home";
+import Jobs from "./web/pages/jobs";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -90,6 +91,7 @@ function App() {
                   >
                     {/* <Route path="*" element={<ErrorComponent />} /> */}
                     <Route path="" element={<Home />} />
+                    <Route path="/jobs" element={<Jobs/>} />
                   </Route>
                   <Route
                     element={

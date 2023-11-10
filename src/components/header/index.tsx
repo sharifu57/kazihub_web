@@ -89,46 +89,17 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
 
       <div className="right-container" style={{ marginRight: "200px" }}>
         <Space>
-          {/* <Menu
-            mode="horizontal"
-            selectedKeys={[currentLocale]}
-            style={{ marginTop: "36px" }}
-          >
-            {menuItems.map((item) => (
-              <Menu.Item
-                key={item.key}
-                onClick={() => changeLanguage(item.key)}
-                style={
-                  currentLocale === item.key
-                    ? { color: primaryColor,borderBottomColor: primaryColor , transition: "all 0.3s"}
-                    : undefined
-                }
-              >
-                {item.label}
-              </Menu.Item>
-            ))}
-          </Menu>
-          <Button
-            style={{
-              borderColor: primaryColor,
-              marginTop: "50px",
-              marginLeft: "100px"
-            }}
-          >
-            Log In
-          </Button> */}
-
           <Menu
             mode="horizontal"
             defaultSelectedKeys={["home"]}
             defaultOpenKeys={["assessment"]}
-            style={{marginTop: "40px"}}
+            style={{ marginTop: "35px" }}
           >
             <Menu.Item>
-              <Link to="Onnnee">Home</Link>
+              <Link to="">Home</Link>
             </Menu.Item>
             <Menu.Item>
-              <Link to="Onnnee">browse Jobs</Link>
+              <Link to="/jobs">browse Jobs</Link>
             </Menu.Item>
             <Menu.Item>
               <Link to="/hore">Hire Talent</Link>
@@ -150,11 +121,21 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
             style={{
               borderColor: primaryColor,
               marginTop: "45px",
-              marginLeft: "10px"
+              marginLeft: "10px",
+              backgroundColor: secondaryColor,
+              color: "white"
             }}
           >
             POST A JOB
           </Button>
+
+          <Switch
+            checkedChildren="🌛"
+            unCheckedChildren="🔆"
+            onChange={() => setMode(mode === "light" ? "dark" : "light")}
+            defaultChecked={mode === "dark"}
+            style={{marginTop: "20px"}}
+          />
         </Space>
       </div>
     </AntdLayout.Header>
