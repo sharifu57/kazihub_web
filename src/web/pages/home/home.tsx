@@ -4,6 +4,7 @@ import { useQuery } from "@apollo/client";
 import {
   Button,
   Card,
+  Cascader,
   Col,
   Divider,
   Flex,
@@ -26,6 +27,11 @@ import {
 } from "@ant-design/icons";
 import { SizeType } from "antd/es/config-provider/SizeContext";
 import { primaryColor, secondaryColor } from "../../utilities/colors";
+import { SearchProps } from "antd/es/input";
+import Search from "antd/es/input/Search";
+
+const onSearch: SearchProps["onSearch"] = (value, _e, info) =>
+  console.log(info?.source, value);
 
 function Home() {
   const { Text } = Typography;
@@ -44,7 +50,9 @@ function Home() {
 
   return (
     <div>
-      <div style={{ marginRight: "200px", marginLeft: "200px", height: "90vh" }}>
+      <div
+        style={{ marginRight: "200px", marginLeft: "200px", height: "90vh" }}
+      >
         <Row gutter={24}>
           <Col span={12}>
             <div style={{ marginTop: "0px" }}>
@@ -67,26 +75,12 @@ function Home() {
             </div>
 
             <div>
-              <Form
-                name="basic"
-                onFinish={(values) => {
-                  // setSearchQuery(values.q);
-                }}
-                autoComplete="off"
-              >
-                <Form.Item
-                  name="q"
-                  rules={[{ required: false, message: "Search Intern!" }]}
-                >
-                  <Input
-                    suffix={<SearchOutlined />}
-                    size="large"
-                    type="search"
-                    placeholder="Search Skills"
-                    allowClear
-                  />
-                </Form.Item>
-              </Form>
+              <Search
+                placeholder="Search Skills"
+                onSearch={onSearch}
+                enterButton
+                size="large"
+              />
             </div>
 
             <div style={{ marginTop: "35px" }}>
@@ -99,7 +93,10 @@ function Home() {
                     {skills ? (
                       skills.map((skill: any) => (
                         <p style={{ display: "inline" }} key={skill?.id}>
-                          <Button shape="round" style={{ marginRight: "3px", marginBottom: "5px" }}>
+                          <Button
+                            shape="round"
+                            style={{ marginRight: "3px", marginBottom: "5px" }}
+                          >
                             {skill?.name}
                           </Button>
                         </p>
@@ -128,7 +125,7 @@ function Home() {
                       type="primary"
                       icon={<DownloadOutlined />}
                       size={size}
-                      style={{backgroundColor: secondaryColor}}
+                      style={{ backgroundColor: secondaryColor }}
                     >
                       Browse Jobs
                     </Button>
@@ -142,9 +139,7 @@ function Home() {
       </div>
 
       <div>
-        <Card>
-          
-        </Card>
+        <Card></Card>
       </div>
     </div>
   );

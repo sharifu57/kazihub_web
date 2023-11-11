@@ -43,6 +43,7 @@ import { Register } from "./pages/register";
 import Home from "./web/pages/home/home";
 import Jobs from "./web/pages/jobs";
 import FrelancerLogin from "./web/pages/authentication/freelancer/login";
+import FreelancerRegister from "./web/pages/authentication/freelancer/register";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -94,6 +95,7 @@ function App() {
                     <Route path="" element={<Home />} />
                     <Route path="/jobs" element={<Jobs />} />
                     <Route path="/login" element={<FrelancerLogin />} />
+                    <Route path="/register" element={<FreelancerRegister/>}/>
                   </Route>
                   <Route
                     element={

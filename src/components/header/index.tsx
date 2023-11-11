@@ -131,7 +131,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
           </Button>
 
           {storedUser?.profile?.name ? (
-            <Space style={{ marginLeft: "8px" }} size="middle">
+            <Space style={{ marginLeft: "8px", marginTop: "25px", marginRight: "10px" }} size="middle">
               <Dropdown
                 menu={{
                   items: menuItems

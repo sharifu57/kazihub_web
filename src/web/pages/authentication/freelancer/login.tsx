@@ -7,7 +7,8 @@ import {
   Form,
   Input,
   Divider,
-  Space
+  Space,
+  Typography
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { primaryColor, secondaryColor } from "../../../utilities/colors";
@@ -17,6 +18,8 @@ import { GoogleLogin } from "@react-oauth/google";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import getUSer from "../../../utilities/userUtils";
+import FreelancerRegister from "./register";
+import { Link } from "react-router-dom";
 
 interface UserData {
   access_token: string;
@@ -24,6 +27,7 @@ interface UserData {
 }
 
 export default function FrelancerLogin() {
+  const { Text } = Typography;
   const [user, setUser] = useState<UserData | null>(null);
   const [profile, setProfile] = useState<any>(null);
   const storedUser = getUSer();
@@ -43,10 +47,6 @@ export default function FrelancerLogin() {
   useEffect(() => {
     getUSer();
 
-    console.log("________stored user")
-    console.log(storedUser)
-    console.log("______end stored user")
-
     if (user) {
       axios
         .get(
@@ -62,13 +62,10 @@ export default function FrelancerLogin() {
           if (res?.status === 200) {
             setProfile(res?.data);
             localStorage.setItem("user", JSON.stringify(user));
-            localStorage.setItem("profile", JSON.stringify(res?.data))
+            localStorage.setItem("profile", JSON.stringify(res?.data));
           } else {
             console.log(res?.status);
           }
-          //   setProfile(res.data);
-          //   console.log("_________accessToken");
-          //   console.log(user?.access_token);
         })
         .catch((err) => console.log(err));
     }
@@ -158,25 +155,30 @@ export default function FrelancerLogin() {
                   <button onClick={logout}>Log out</button>
                 </Space>
               ) : (
-                <div>
+                <div style={{marginBottom: "20px"}}>
                   <Button onClick={() => login()} block>
                     Sign in with Google 🚀{" "}
                   </Button>
                 </div>
               )}
 
-              <Button
-                shape="round"
-                block
-                style={{
-                  height: "40px",
-                  marginTop: "10px",
-                  backgroundColor: primaryColor,
-                  color: "white"
-                }}
-              >
-                Sign Up
-              </Button>
+              {/* <Link to="/register">
+                <Button
+                  shape="round"
+                  block
+                  style={{
+                    height: "40px",
+                    marginTop: "10px",
+                    backgroundColor: primaryColor,
+                    color: "white"
+                  }}
+                >
+                  Sign Up
+                </Button>
+              </Link> */}
+              <Text style={{marginTop: "100px"}}>
+                  Don't have an account? <Link to="/register">Sign Up</Link>
+              </Text>
             </div>
           </Card>
         </Col>
