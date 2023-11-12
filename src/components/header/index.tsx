@@ -1,5 +1,4 @@
 import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
-import { useGetIdentity, useGetLocale, useSetLocale } from "@refinedev/core";
 import {
   Button,
   Layout as AntdLayout,
@@ -8,26 +7,16 @@ import {
   Switch,
   theme,
   Typography,
-  Modal,
   Avatar,
-  Col,
-  Dropdown,
-  Row
-} from "antd";
-import React, { useContext, useEffect, useState } from "react";
-import { useTranslation } from "react-i18next";
+  Dropdown} from "antd";
+import React, { useContext, useEffect } from "react";
 import { ColorModeContext } from "../../contexts/color-mode";
 import { Link } from "react-router-dom";
 import { primaryColor, secondaryColor } from "../../web/utilities/colors";
 import getUSer from "../../web/utilities/userUtils";
 import {
   DownOutlined,
-  LoginOutlined,
-  ProfileOutlined
-} from "@ant-design/icons";
-import MenuItem from "antd/es/menu/MenuItem";
-import UserLogout from "../../web/utilities/logout";
-import { googleLogout } from "@react-oauth/google";
+  LoginOutlined} from "@ant-design/icons";
 
 const { Text } = Typography;
 const { useToken } = theme;
@@ -44,13 +33,15 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
     justifyContent: "space-between",
     alignItems: "center",
     padding: "0px 24px",
-    height: "75px"
+    height: "75px",
+    boxShadow: sticky ? "0px 1px 1px rgba(0, 0, 0, 0.1)" : "none"
   };
 
   if (sticky) {
     headerStyles.position = "sticky";
     headerStyles.top = 0;
     headerStyles.zIndex = 1;
+    
   }
 
   const storedUser = getUSer();
@@ -85,7 +76,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
     <AntdLayout.Header style={headerStyles}>
       <div className="left-container" style={{ marginLeft: "170px" }}>
         <Space>
-          <Link to="/home">
+          <Link to="">
             <img
               width={180}
               src="/images/logos/logo1.png"
@@ -168,13 +159,13 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
             </Button>
           )}
 
-          <Switch
+          {/* <Switch
             checkedChildren="🌛"
             unCheckedChildren="🔆"
             onChange={() => setMode(mode === "light" ? "dark" : "light")}
             defaultChecked={mode === "dark"}
             style={{ marginTop: "20px" }}
-          />
+          /> */}
         </Space>
       </div>
     </AntdLayout.Header>

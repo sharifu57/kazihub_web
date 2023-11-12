@@ -8,22 +8,30 @@ import {
   Input,
   Divider,
   Space,
-  Typography
+  Typography,
+  Spin,
+  notification
 } from "antd";
 import React, { useEffect, useState } from "react";
 import { primaryColor, secondaryColor } from "../../../utilities/colors";
 import Logo from "../../../utilities/logo";
-import { UserOutlined, LockOutlined, GoogleOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  LockOutlined,
+  GoogleOutlined,
+  MailFilled
+} from "@ant-design/icons";
 import { GoogleLogin } from "@react-oauth/google";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
 import getUSer from "../../../utilities/userUtils";
 import FreelancerRegister from "./register";
 import { Link } from "react-router-dom";
+import { useMutation } from "@apollo/client";
+import { LOGIN_USER } from "../../../../providers/mutations";
 
 interface UserData {
   access_token: string;
-  // Add other properties as needed
 }
 
 export default function FrelancerLogin() {
@@ -32,6 +40,7 @@ export default function FrelancerLogin() {
   const [profile, setProfile] = useState<any>(null);
   const storedUser = getUSer();
   const userToken = storedUser?.user?.access_token;
+  const [loadingSpinner, setLoadingSpinner] = useState(false);
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => setUser(codeResponse as UserData),
     onError: (error) => console.log("Login Failed:", error)
@@ -42,6 +51,47 @@ export default function FrelancerLogin() {
     setUser(null);
     localStorage.clear();
     window.location.reload();
+  };
+
+  const [loginUser, { loading, error, data }] = useMutation(LOGIN_USER);
+
+  const handleLoginUser = async (values: any) => {
+    setLoadingSpinner(true);
+
+    try {
+      const { data } = await loginUser({
+        variables: {
+          email: values.email,
+          password: values.password
+        }
+      });
+
+      if (data?.loginUser?.status === true) {
+        notification.success({
+          message: "Login Success",
+          description: `${data?.loginUser?.message}`,
+          placement: "topRight"
+        });
+        setTimeout(() => {
+          setLoadingSpinner(false);
+          localStorage.setItem(
+            "token",
+            JSON.stringify(`${data?.loginUser?.token}`)
+          );
+        }, 2000);
+      } else {
+        notification.error({
+          message: "Login Failed",
+          description: `${data?.loginUser?.message}`,
+          placement: "topRight"
+        });
+        setTimeout(() => {
+          setLoadingSpinner(false);
+        }, 2000);
+      }
+    } catch (e) {
+      console.log(e);
+    }
   };
 
   useEffect(() => {
@@ -74,6 +124,7 @@ export default function FrelancerLogin() {
     <>
       <Row justify="center" align="middle" style={{ marginTop: "100px" }}>
         <Col>
+          
           <Card
             bordered={true}
             style={{
@@ -100,16 +151,20 @@ export default function FrelancerLogin() {
                 name="normal_login"
                 className="login-form"
                 initialValues={{ remember: true }}
+                onFinish={(values) => {
+                  handleLoginUser(values);
+                }}
               >
                 <Form.Item
-                  name="username"
+                  name="email"
                   rules={[
                     { required: true, message: "Please input your Username!" }
                   ]}
                 >
                   <Input
-                    prefix={<UserOutlined className="site-form-item-icon" />}
-                    placeholder="Username"
+                    type="email"
+                    prefix={<MailFilled className="site-form-item-icon" />}
+                    placeholder="email"
                     style={{ height: "40px" }}
                   />
                 </Form.Item>
@@ -131,10 +186,16 @@ export default function FrelancerLogin() {
                   <Button
                     type="primary"
                     shape="round"
+                    htmlType="submit"
                     block
                     style={{ backgroundColor: secondaryColor, height: "40px" }}
+                    disabled={loadingSpinner}
                   >
-                    Sign In
+                    {loadingSpinner ? (
+                      <Spin style={{ color: primaryColor }} />
+                    ) : (
+                      <Text style={{ color: "white" }}>Sign In</Text>
+                    )}
                   </Button>
                 </Form.Item>
               </Form>
@@ -155,29 +216,15 @@ export default function FrelancerLogin() {
                   <button onClick={logout}>Log out</button>
                 </Space>
               ) : (
-                <div style={{marginBottom: "20px"}}>
+                <div style={{ marginBottom: "20px" }}>
                   <Button onClick={() => login()} block>
                     Sign in with Google 🚀{" "}
                   </Button>
                 </div>
               )}
 
-              {/* <Link to="/register">
-                <Button
-                  shape="round"
-                  block
-                  style={{
-                    height: "40px",
-                    marginTop: "10px",
-                    backgroundColor: primaryColor,
-                    color: "white"
-                  }}
-                >
-                  Sign Up
-                </Button>
-              </Link> */}
-              <Text style={{marginTop: "100px"}}>
-                  Don't have an account? <Link to="/register">Sign Up</Link>
+              <Text style={{ marginTop: "100px" }}>
+                Don't have an account? <Link to="/register">Sign Up</Link>
               </Text>
             </div>
           </Card>

@@ -44,6 +44,7 @@ import Home from "./web/pages/home/home";
 import Jobs from "./web/pages/jobs";
 import FrelancerLogin from "./web/pages/authentication/freelancer/login";
 import FreelancerRegister from "./web/pages/authentication/freelancer/register";
+import WebIndex from "./web/pages/web_index";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -92,7 +93,7 @@ function App() {
                     }
                   >
                     {/* <Route path="*" element={<ErrorComponent />} /> */}
-                    <Route path="" element={<Home />} />
+                    <Route path="" element={<WebIndex />} />
                     <Route path="/jobs" element={<Jobs />} />
                     <Route path="/login" element={<FrelancerLogin />} />
                     <Route path="/register" element={<FreelancerRegister/>}/>

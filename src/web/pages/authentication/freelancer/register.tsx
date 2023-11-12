@@ -1,4 +1,9 @@
-import { UserOutlined, LockOutlined, MailOutlined } from "@ant-design/icons";
+import {
+  UserOutlined,
+  LockOutlined,
+  MailOutlined,
+  GoogleOutlined
+} from "@ant-design/icons";
 import {
   Row,
   Col,
@@ -9,7 +14,9 @@ import {
   Divider,
   Checkbox,
   Typography,
-  Select
+  Select,
+  notification,
+  Spin
 } from "antd";
 import React, { useState } from "react";
 import { secondaryColor } from "../../../utilities/colors";
@@ -18,10 +25,22 @@ import { Link } from "react-router-dom";
 import { Image } from "antd";
 import { useMutation } from "@apollo/client";
 import { CREATE_USER } from "../../../../providers/mutations";
+import { useGoogleLogin } from "@react-oauth/google";
+import login from "./login";
 
 export default function FreelancerRegister() {
+  interface UserData {
+    access_token: string;
+    // Add other properties as needed
+  }
   const { Text } = Typography;
   const [loadSpinner, setLoadingSpinner] = useState(false);
+  const [user, setUser] = useState<UserData | null>(null);
+
+  const login = useGoogleLogin({
+    onSuccess: (codeResponse) => setUser(codeResponse as UserData),
+    onError: (error) => console.log("Login Failed:", error)
+  });
 
   const formStyles: React.CSSProperties = {
     height: "40px"
@@ -45,12 +64,16 @@ export default function FreelancerRegister() {
       if (data?.createUser?.status === true) {
         setTimeout(() => {
           form.resetFields();
-
           setLoadingSpinner(false);
         }, 2000);
       } else {
         setTimeout(() => {
           setLoadingSpinner(false);
+          notification.error({
+            message: "Registration Failed",
+            description: `${data?.createUser?.message}`,
+            placement: "topRight"
+          });
         }, 2000);
       }
     } catch (error) {
@@ -230,7 +253,7 @@ export default function FreelancerRegister() {
                     disabled={loadSpinner}
                   >
                     {loadSpinner ? (
-                      <Text style={{ color: "white" }}>Please wait...</Text>
+                      <Spin />
                     ) : (
                       <Text style={{ color: "white" }}>Sign Up</Text>
                     )}
@@ -247,34 +270,23 @@ export default function FreelancerRegister() {
               }}
             >
               <Divider />
-              {/* {userToken ? (
-                <Space>
-                  <p>{profile?.name}</p>
-                  <img src={profile?.picture} alt="user image" />
-                  <button onClick={logout}>Log out</button>
-                </Space>
-              ) : (
-                <div>
-                  <Button onClick={() => login()} block>
-                    Sign in with Google 🚀{" "}
-                  </Button>
-                </div>
-              )} */}
-
-              {/* <Link to="/login">
+              <div>
                 <Button
-                  shape="round"
+                  onClick={() => login()}
                   block
                   style={{
                     height: "40px",
-                    marginTop: "10px",
-                    backgroundColor: primaryColor,
-                    color: "white"
+                    marginTop: "0px",
+                    backgroundColor: "#4285F4",
+                    color: "white",
+                    border: "1px solid #4285F4",
+                    borderRadius: "10px"
                   }}
                 >
-                  Sign In
+                  <GoogleOutlined style={{ marginRight: "8px" }} />
+                  Continue with Google
                 </Button>
-              </Link> */}
+              </div>
 
               <Text>
                 already have an account?{" "}

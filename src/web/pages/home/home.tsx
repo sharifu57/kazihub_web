@@ -51,7 +51,7 @@ function Home() {
   return (
     <div>
       <div
-        style={{ marginRight: "200px", marginLeft: "200px", height: "90vh" }}
+        style={{ marginRight: "200px", marginLeft: "200px", height: "75vh" }}
       >
         <Row gutter={24}>
           <Col span={12}>
@@ -117,7 +117,7 @@ function Home() {
                       type="primary"
                       icon={<UsergroupDeleteOutlined />}
                       size={size}
-                      style={{ backgroundColor: secondaryColor }}
+                      style={{ backgroundColor: primaryColor }}
                     >
                       Get Freelancer
                     </Button>
@@ -125,7 +125,7 @@ function Home() {
                       type="primary"
                       icon={<DownloadOutlined />}
                       size={size}
-                      style={{ backgroundColor: secondaryColor }}
+                      style={{ backgroundColor: primaryColor }}
                     >
                       Browse Jobs
                     </Button>
@@ -136,10 +136,6 @@ function Home() {
           </Col>
           <Col span={12}>right</Col>
         </Row>
-      </div>
-
-      <div>
-        <Card></Card>
       </div>
     </div>
   );
