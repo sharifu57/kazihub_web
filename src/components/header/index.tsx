@@ -2,8 +2,9 @@
 
 import { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
 import { useContext, useState, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ColorModeContext } from "../../contexts/color-mode";
+
 import {
   Button,
   Layout as AntdLayout,
@@ -35,11 +36,14 @@ interface User {
   };
 }
 
+
+// const navigate = useNavigate()
 // ... (existing interfaces and context)
 
 export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky
 }) => {
+  const navigate = useNavigate();
   const { token } = useToken();
   const { mode, setMode } = useContext(ColorModeContext);
   const [user, setUser] = useState<User | null>(null);
@@ -64,6 +68,7 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
     localStorage.removeItem("userObj");
     localStorage.removeItem("user");
     setUser(null);
+    navigate("")
   };
 
   useEffect(() => {

@@ -68,7 +68,6 @@ export default function FrelancerLogin() {
         // localStorage.setItem("token", userToken);
         // localStorage.setItem("user", JSON.stringify(userToStore));
         localStorage.setItem("userObj", JSON.stringify(userObj));
-
         notification.success({
           message: "Login Success",
           description: `${data?.loginUser?.message}`,
@@ -112,6 +111,7 @@ export default function FrelancerLogin() {
         .then((res) => {
           if (res?.status === 200) {
             setProfile(res?.data);
+
             // localStorage.setItem("user", JSON.stringify(user));
             // localStorage.setItem("profile", JSON.stringify(res?.data));
           } else {

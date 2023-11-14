@@ -46,6 +46,7 @@ import FrelancerLogin from "./web/pages/authentication/freelancer/login";
 import FreelancerRegister from "./web/pages/authentication/freelancer/register";
 import WebIndex from "./web/pages/web_index";
 import Profile from "./web/pages/profile";
+import BestMatch from "./web/pages/jobs/best_match";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -99,6 +100,7 @@ function App() {
                     <Route path="/register" element={<FreelancerRegister />} />
 
                     <Route path="/profile" element={<Profile />} />
+                    <Route path="/best/match" element={<BestMatch/>}/>
                   </Route>
                   <Route
                     element={

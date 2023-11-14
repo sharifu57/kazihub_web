@@ -42,6 +42,20 @@ export const LOGIN_USER = gql`
         lastName
         username
         lastLogin
+        dateJoined
+      }
+      userProfile {
+        id
+        location {
+          name
+          code
+        }
+        phoneNumber
+        title
+        description
+        rate
+        hourRate
+        picture
       }
       message
       status
