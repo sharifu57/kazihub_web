@@ -3,43 +3,36 @@ import {
   Col,
   Card,
   Button,
-  Checkbox,
   Form,
   Input,
   Divider,
-  Space,
   Typography,
   Spin,
   notification
 } from "antd";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { primaryColor, secondaryColor } from "../../../utilities/colors";
-import Logo from "../../../utilities/logo";
-import {
-  UserOutlined,
-  LockOutlined,
-  GoogleOutlined,
-  MailFilled
-} from "@ant-design/icons";
-import { GoogleLogin } from "@react-oauth/google";
+import { LockOutlined, MailFilled } from "@ant-design/icons";
 import { googleLogout, useGoogleLogin } from "@react-oauth/google";
 import axios from "axios";
-import getUSer from "../../../utilities/userUtils";
-import FreelancerRegister from "./register";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useMutation } from "@apollo/client";
 import { LOGIN_USER } from "../../../../providers/mutations";
+import getUser from "../../../utilities/userUtils";
 
 interface UserData {
   access_token: string;
 }
 
 export default function FrelancerLogin() {
+  const navigate = useNavigate();
   const { Text } = Typography;
   const [user, setUser] = useState<UserData | null>(null);
   const [profile, setProfile] = useState<any>(null);
-  const storedUser = getUSer();
-  const userToken = storedUser?.user?.access_token;
+  const [systemUser, setSystemUser] = useState<any>(null);
+  const storedUser = getUser();
+
+  // const userToken = storedUser?.user?.access_token;
   const [loadingSpinner, setLoadingSpinner] = useState(false);
   const login = useGoogleLogin({
     onSuccess: (codeResponse) => setUser(codeResponse as UserData),
@@ -67,17 +60,25 @@ export default function FrelancerLogin() {
       });
 
       if (data?.loginUser?.status === true) {
+        console.log(data);
+        const userToken = data?.loginUser?.token;
+        const userToStore = data?.loginUser?.user;
+        const userObj = data?.loginUser;
+
+        // localStorage.setItem("token", userToken);
+        // localStorage.setItem("user", JSON.stringify(userToStore));
+        localStorage.setItem("userObj", JSON.stringify(userObj));
+
         notification.success({
           message: "Login Success",
           description: `${data?.loginUser?.message}`,
           placement: "topRight"
         });
+
         setTimeout(() => {
           setLoadingSpinner(false);
-          localStorage.setItem(
-            "token",
-            JSON.stringify(`${data?.loginUser?.token}`)
-          );
+
+          navigate("/profile");
         }, 2000);
       } else {
         notification.error({
@@ -95,7 +96,7 @@ export default function FrelancerLogin() {
   };
 
   useEffect(() => {
-    getUSer();
+    // getUSer();
 
     if (user) {
       axios
@@ -111,8 +112,8 @@ export default function FrelancerLogin() {
         .then((res) => {
           if (res?.status === 200) {
             setProfile(res?.data);
-            localStorage.setItem("user", JSON.stringify(user));
-            localStorage.setItem("profile", JSON.stringify(res?.data));
+            // localStorage.setItem("user", JSON.stringify(user));
+            // localStorage.setItem("profile", JSON.stringify(res?.data));
           } else {
             console.log(res?.status);
           }
@@ -124,7 +125,6 @@ export default function FrelancerLogin() {
     <>
       <Row justify="center" align="middle" style={{ marginTop: "100px" }}>
         <Col>
-          
           <Card
             bordered={true}
             style={{
@@ -209,7 +209,7 @@ export default function FrelancerLogin() {
               }}
             >
               <Divider />
-              {userToken ? (
+              {/* {userToken ? (
                 <Space>
                   <p>{profile?.name}</p>
                   <img src={profile?.picture} alt="user image" />
@@ -221,7 +221,7 @@ export default function FrelancerLogin() {
                     Sign in with Google 🚀{" "}
                   </Button>
                 </div>
-              )}
+              )} */}
 
               <Text style={{ marginTop: "100px" }}>
                 Don't have an account? <Link to="/register">Sign Up</Link>

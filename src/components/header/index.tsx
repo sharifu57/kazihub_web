@@ -1,4 +1,9 @@
-import type { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
+// ... (existing imports)
+
+import { RefineThemedLayoutV2HeaderProps } from "@refinedev/antd";
+import { useContext, useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import { ColorModeContext } from "../../contexts/color-mode";
 import {
   Button,
   Layout as AntdLayout,
@@ -8,24 +13,36 @@ import {
   theme,
   Typography,
   Avatar,
-  Dropdown} from "antd";
-import React, { useContext, useEffect } from "react";
-import { ColorModeContext } from "../../contexts/color-mode";
-import { Link } from "react-router-dom";
+  Dropdown,
+  Row,
+  Col
+} from "antd";
 import { primaryColor, secondaryColor } from "../../web/utilities/colors";
-import getUSer from "../../web/utilities/userUtils";
-import {
-  DownOutlined,
-  LoginOutlined} from "@ant-design/icons";
+import { LogoutOutlined } from "@ant-design/icons";
 
 const { Text } = Typography;
 const { useToken } = theme;
+
+interface User {
+  id: string;
+  email: string;
+  token: string;
+  user: {
+    id: string;
+    firstName: string;
+    lastName: string;
+    email: string;
+  };
+}
+
+// ... (existing interfaces and context)
 
 export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
   sticky
 }) => {
   const { token } = useToken();
   const { mode, setMode } = useContext(ColorModeContext);
+  const [user, setUser] = useState<User | null>(null);
 
   const headerStyles: React.CSSProperties = {
     backgroundColor: token.colorBgElevated,
@@ -41,36 +58,26 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
     headerStyles.position = "sticky";
     headerStyles.top = 0;
     headerStyles.zIndex = 1;
-    
   }
 
-  const storedUser = getUSer();
-
-  
-
-  interface MenuItem {
-    key: string;
-    icon: React.ReactElement;
-    label: React.ReactElement;
-    danger?: boolean;
-  }
-
-  const menuItems: MenuItem[] = [
-    {
-      key: "1",
-      icon: <LoginOutlined />,
-      danger: true,
-      label: (
-        <Button danger onClick={() => {}}>
-          Log out
-        </Button>
-      )
-    }
-  ].filter(Boolean) as MenuItem[];
+  const handlelogout = () => {
+    localStorage.removeItem("userObj");
+    localStorage.removeItem("user");
+    setUser(null);
+  };
 
   useEffect(() => {
-    getUSer();
-  });
+    const storedUser = localStorage.getItem("userObj");
+
+    if (storedUser) {
+      try {
+        const parsedUser = JSON.parse(storedUser) as User;
+        setUser(parsedUser);
+      } catch (error) {
+        console.error("Error parsing user data:", error);
+      }
+    }
+  }, []);
 
   return (
     <AntdLayout.Header style={headerStyles}>
@@ -87,85 +94,85 @@ export const Header: React.FC<RefineThemedLayoutV2HeaderProps> = ({
         </Space>
       </div>
 
-      <div className="right-container" style={{ marginRight: "200px" }}>
-        <Space>
+      {/* Center Section */}
+      <div className="center-container">
+        <Space size="large">
           <Menu
             mode="horizontal"
             defaultSelectedKeys={["home"]}
             defaultOpenKeys={["assessment"]}
-            style={{ marginTop: "35px" }}
+            style={{ marginTop: "36px" }}
           >
             <Menu.Item>
               <Link to="">Home</Link>
             </Menu.Item>
             <Menu.Item>
-              <Link to="/jobs">browse Jobs</Link>
+              <Link to="/jobs">Browse Jobs</Link>
             </Menu.Item>
             <Menu.Item>
-              <Link to="/hore">Hire Talent</Link>
+              <Link to="/hire">Hire Talent</Link>
             </Menu.Item>
             <Menu.Item>
-              <Link to="/hore">About</Link>
+              <Link to="/about">About</Link>
             </Menu.Item>
           </Menu>
+        </Space>
+      </div>
 
-          <Button
-            style={{
-              borderColor: primaryColor,
-              marginTop: "45px",
-              marginLeft: "10px",
-              backgroundColor: secondaryColor,
-              color: "white"
-            }}
-          >
-            POST A JOB
-          </Button>
-
-          {storedUser?.profile?.name ? (
-            <Space style={{ marginLeft: "8px", marginTop: "25px", marginRight: "10px" }} size="middle">
+      {/* Right Section */}
+      <div className="right-container" style={{ marginRight: "170px" }}>
+        <Space>
+          {user?.token ? (
+            <div>
               <Dropdown
-                menu={{
-                  items: menuItems
+                overlay={
+                  <Menu style={{ width: 250 }}>
+                    <Menu.Item>
+                      <Link to="/profile">Profile</Link>
+                    </Menu.Item>
+                    <Menu.Item style={{ marginTop: "5px" }}>
+                      <Link to="#" onClick={handlelogout}>
+                        <Row gutter={24}>
+                          {" "}
+                          <Col span={3}>
+                            {" "}
+                            <LogoutOutlined />
+                          </Col>
+                          <Col>Logout</Col>
+                        </Row>
+                      </Link>
+                    </Menu.Item>
+                  </Menu>
+                }
+                placement="bottomLeft"
+              >
+                <Avatar src={user?.user?.id} alt="User Avatar" />
+              </Dropdown>
+            </div>
+          ) : (
+            <div>
+              <Button shape="round">
+                <Link to="login">Sign In</Link>
+              </Button>
+              <Button
+                shape="round"
+                style={{
+                  marginLeft: "10px",
+                  backgroundColor: secondaryColor,
+                  color: "white"
                 }}
               >
-                <Button type="text">
-                  <Space>
-                    {storedUser?.profile?.name ? (
-                      <Text>{storedUser?.profile?.name}</Text>
-                    ) : (
-                      <Text strong>storedUser?.profile?.email</Text>
-                    )}
-                    <DownOutlined />
-                  </Space>
-                </Button>
-              </Dropdown>
-
-              {storedUser?.profile?.picture && (
-                <Avatar
-                  src={storedUser?.profile?.picture}
-                  alt={storedUser?.profile?.name}
-                />
-              )}
-            </Space>
-          ) : (
-            <Button
-              style={{
-                borderColor: primaryColor,
-                marginTop: "45px",
-                marginLeft: "100px"
-              }}
-            >
-              <Link to="login">Sign In</Link>
-            </Button>
+                <Link to="register">Sign Up</Link>
+              </Button>
+            </div>
           )}
 
-          {/* <Switch
+          <Switch
             checkedChildren="🌛"
             unCheckedChildren="🔆"
             onChange={() => setMode(mode === "light" ? "dark" : "light")}
-            defaultChecked={mode === "dark"}
-            style={{ marginTop: "20px" }}
-          /> */}
+            defaultChecked={mode === "light"}
+          />
         </Space>
       </div>
     </AntdLayout.Header>

@@ -45,6 +45,7 @@ import Jobs from "./web/pages/jobs";
 import FrelancerLogin from "./web/pages/authentication/freelancer/login";
 import FreelancerRegister from "./web/pages/authentication/freelancer/register";
 import WebIndex from "./web/pages/web_index";
+import Profile from "./web/pages/profile";
 
 function App() {
   const { t, i18n } = useTranslation();
@@ -92,21 +93,20 @@ function App() {
                       </ThemedLayoutV2>
                     }
                   >
-                    {/* <Route path="*" element={<ErrorComponent />} /> */}
                     <Route path="" element={<WebIndex />} />
                     <Route path="/jobs" element={<Jobs />} />
                     <Route path="/login" element={<FrelancerLogin />} />
-                    <Route path="/register" element={<FreelancerRegister/>}/>
+                    <Route path="/register" element={<FreelancerRegister />} />
+
+                    <Route path="/profile" element={<Profile />} />
                   </Route>
                   <Route
                     element={
                       <Authenticated
-                        key="authenticated-inner"
                         fallback={<CatchAllNavigate to="/login" />}
                       >
                         <ThemedLayoutV2
                           Header={() => <Header sticky />}
-                          Sider={(props) => <ThemedSiderV2 {...props} fixed />}
                           Title={({ collapsed }) => (
                             <ThemedTitleV2
                               collapsed={collapsed}

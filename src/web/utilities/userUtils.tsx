@@ -1,19 +1,18 @@
 import React from "react";
 
-export default function getUSer() {
-  const storedUser = localStorage.getItem("user") || "";
-  const storedProfile = localStorage.getItem("profile") || "";
-  const token  =localStorage.getItem("token") || "";
 
-  try {
-    let user = JSON.parse(storedUser);
-    let profile = JSON.parse(storedProfile);
-    if (user && profile && token) {
-      return { user, profile, token };
-    } else {
-      return null;
+interface User {
+  id: string
+}
+export default function getUSer() {
+  const storedUser = localStorage.getItem("userObj");
+
+  if (storedUser) {
+    try {
+      const user = JSON.parse(storedUser) as User;
+      return user;
+    } catch (error) {
+      console.log("Error parsing data", error);
     }
-  } catch (e) {
-    return null;
   }
 }
