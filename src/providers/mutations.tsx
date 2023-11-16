@@ -50,6 +50,10 @@ export const LOGIN_USER = gql`
           name
           code
         }
+        category {
+          id
+          name
+        }
         phoneNumber
         title
         description

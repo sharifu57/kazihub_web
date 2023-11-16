@@ -27,3 +27,33 @@ export const get_skills = gql`
     }
   }
 `;
+
+export const GET_PROJECTS = gql`
+  query GetProjects($categoryID: String!) {
+    projects(categoryId: $categoryID) {
+      id
+      isActive
+      isDeleted
+      title
+      description
+      budget {
+        id
+        title
+        priceFrom
+        priceTo
+      }
+      duration
+      location {
+        id
+        name
+      }
+      skill {
+        id
+        name
+      }
+      paymentType
+      attachment
+      status
+    }
+  }
+`;
